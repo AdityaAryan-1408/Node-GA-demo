@@ -1,0 +1,42 @@
+name: Node.js CI Pipeline
+
+# 1. THE TRIGGER
+# When should this automation run?
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+# 2. THE JOBS
+# What tasks should we perform?
+jobs:
+  build-and-test:
+    # 3. THE RUNNER
+    # Where does this run? We ask GitHub for a fresh Ubuntu Linux server.
+    runs-on: ubuntu-latest
+
+    # 4. THE STEPS
+    # The sequence of actions to execute
+    steps:
+    # Step A: Get the code
+    # We use a pre-made action to download our code onto the runner.
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    # Step B: Prepare the Environment
+    # We set up Node.js (specifically version 18).
+    - name: Setup Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: '18'
+
+    # Step C: Install Dependencies
+    # Even though our simple app has none, this is best practice.
+    - name: Install dependencies
+      run: npm install
+
+    # Step D: Run the Test
+    # This executes the command we defined in Phase 1.
+    - name: Run Tests
+      run: npm test
